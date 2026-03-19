@@ -31,5 +31,15 @@
   "profile.save": "Save changes",
   "profile.saving": "Saving...",
   "profile.saved": "Changes saved successfully",
-  "profile.error": "Failed to save changes"
+  "profile.error": "Failed to save changes",
+  "worlds.title": "Available Worlds",
+  "worlds.empty": "No worlds available at the moment.",
+  "worlds.join": "Join",
+  "worlds.joining": "Joining...",
+  "worlds.speed.standard": "Standard",
+  "worlds.speed.speed": "Speed",
+  "worlds.speed.casual": "Casual",
+  "worlds.status.open": "Open",
+  "worlds.status.active": "Active",
+  "worlds.status.ended": "Ended"
 }
