@@ -41,5 +41,16 @@
   "worlds.speed.casual": "Détente",
   "worlds.status.open": "Ouvert",
   "worlds.status.active": "Actif",
-  "worlds.status.ended": "Terminé"
+  "worlds.status.ended": "Terminé",
+  "city.create.title": "Fonder votre cité",
+  "city.create.description": "Choisissez un nom pour votre cité capitale. Une île vous sera attribuée aléatoirement.",
+  "city.create.nameLabel": "Nom de la cité",
+  "city.create.namePlaceholder": "Entrez le nom de la cité...",
+  "city.create.nameError": "Le nom de la cité doit contenir entre 3 et 100 caractères.",
+  "city.create.submit": "Fonder la cité",
+  "city.create.submitting": "Fondation en cours...",
+  "city.create.error.UNAUTHORIZED": "Vous devez être connecté.",
+  "city.create.error.PLAYER_NOT_FOUND": "Joueur introuvable.",
+  "city.create.error.ALREADY_HAS_CITY": "Vous possédez déjà une cité dans ce monde.",
+  "city.create.error.NO_ISLAND_AVAILABLE": "Aucune île disponible. Essayez un autre monde."
 }
