@@ -1,7 +1,15 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getSession } from '~/lib/auth.functions'
+import { getUpgradeCost } from '~/lib/buildings'
 import { getCityOverview } from '~/server/cities'
+import { upgradeBuilding } from '~/server/buildings'
+
+type BuildingType =
+  | 'farm' | 'lumber_mill' | 'quarry' | 'market'
+  | 'barracks' | 'stable' | 'siege_workshop' | 'harbor'
+  | 'wall' | 'senate' | 'academy' | 'warehouse' | 'tavern' | 'temple'
 
 export const Route = createFileRoute('/worlds/$worldId/city/$cityId')({
   beforeLoad: async () => {
@@ -36,8 +44,21 @@ const INFRA_BUILDING_TYPES = new Set([
 
 function CityOverviewPage() {
   const { t } = useTranslation()
+  const router = useRouter()
   const { city, buildings, productionRates, currentResources, storageCap } =
     Route.useLoaderData()
+  const [upgradingType, setUpgradingType] = useState<string | null>(null)
+
+  const hasActiveUpgrade = buildings.some((b) => b.isUpgrading)
+
+  const handleUpgrade = async (buildingType: BuildingType) => {
+    setUpgradingType(buildingType)
+    const result = await upgradeBuilding({ data: { cityId: city.id, buildingType } })
+    if (result.success) {
+      router.invalidate()
+    }
+    setUpgradingType(null)
+  }
 
   const resources = [
     { key: 'food' as const, amount: currentResources.food },
@@ -103,17 +124,36 @@ function CityOverviewPage() {
       <BuildingSection
         title={t('city.buildings.resource')}
         buildings={resourceBuildings}
+        currentResources={currentResources}
+        hasActiveUpgrade={hasActiveUpgrade}
+        upgradingType={upgradingType}
+        onUpgrade={handleUpgrade}
       />
       <BuildingSection
         title={t('city.buildings.military')}
         buildings={militaryBuildings}
+        currentResources={currentResources}
+        hasActiveUpgrade={hasActiveUpgrade}
+        upgradingType={upgradingType}
+        onUpgrade={handleUpgrade}
       />
       <BuildingSection
         title={t('city.buildings.infrastructure')}
         buildings={infrastructureBuildings}
+        currentResources={currentResources}
+        hasActiveUpgrade={hasActiveUpgrade}
+        upgradingType={upgradingType}
+        onUpgrade={handleUpgrade}
       />
     </div>
   )
+}
+
+interface ResourceAmounts {
+  food: number
+  wood: number
+  stone: number
+  gold: number
 }
 
 interface BuildingSectionProps {
@@ -125,9 +165,20 @@ interface BuildingSectionProps {
     isUpgrading: boolean
     upgradeEndsAt: Date | null
   }>
+  currentResources: ResourceAmounts
+  hasActiveUpgrade: boolean
+  upgradingType: string | null
+  onUpgrade: (type: BuildingType) => void
 }
 
-function BuildingSection({ title, buildings }: BuildingSectionProps) {
+function BuildingSection({
+  title,
+  buildings,
+  currentResources,
+  hasActiveUpgrade,
+  upgradingType,
+  onUpgrade,
+}: BuildingSectionProps) {
   const { t } = useTranslation()
 
   if (buildings.length === 0) return null
@@ -136,34 +187,72 @@ function BuildingSection({ title, buildings }: BuildingSectionProps) {
     <div className="space-y-3">
       <h2 className="text-lg font-semibold">{title}</h2>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {buildings.map((building) => (
-          <div
-            key={building.id}
-            className="rounded border p-3 space-y-2"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium">
-                {t(`city.building.${building.type}`)}
-              </h3>
-              <span className="text-sm text-gray-500">
-                {t('city.level')} {building.level}
-              </span>
-            </div>
+        {buildings.map((building) => {
+          const cost = getUpgradeCost(building.type, building.level)
+          const canAfford = cost
+            ? currentResources.food >= cost.food &&
+              currentResources.wood >= cost.wood &&
+              currentResources.stone >= cost.stone &&
+              currentResources.gold >= cost.gold
+            : false
+          const isDisabled =
+            building.isUpgrading ||
+            hasActiveUpgrade ||
+            !cost ||
+            !canAfford ||
+            upgradingType !== null
 
-            {building.isUpgrading && building.upgradeEndsAt && (
-              <UpgradeTimer endsAt={building.upgradeEndsAt} />
-            )}
-
-            <button
-              disabled={building.isUpgrading}
-              className="w-full rounded bg-gray-800 px-3 py-1.5 text-xs text-white dark:bg-gray-200 dark:text-gray-900 disabled:opacity-50"
+          return (
+            <div
+              key={building.id}
+              className="rounded border p-3 space-y-2"
             >
-              {building.isUpgrading
-                ? t('city.upgrading')
-                : t('city.upgrade')}
-            </button>
-          </div>
-        ))}
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium">
+                  {t(`city.building.${building.type}`)}
+                </h3>
+                <span className="text-sm text-gray-500">
+                  {t('city.level')} {building.level}
+                </span>
+              </div>
+
+              {building.isUpgrading && building.upgradeEndsAt && (
+                <UpgradeTimer endsAt={building.upgradeEndsAt} />
+              )}
+
+              {cost && !building.isUpgrading && (
+                <div className="grid grid-cols-2 gap-1 text-xs text-gray-500">
+                  <span className={currentResources.food < cost.food ? 'text-red-500' : ''}>
+                    🌾 {formatNumber(cost.food)}
+                  </span>
+                  <span className={currentResources.wood < cost.wood ? 'text-red-500' : ''}>
+                    🪵 {formatNumber(cost.wood)}
+                  </span>
+                  <span className={currentResources.stone < cost.stone ? 'text-red-500' : ''}>
+                    🪨 {formatNumber(cost.stone)}
+                  </span>
+                  <span className={currentResources.gold < cost.gold ? 'text-red-500' : ''}>
+                    💰 {formatNumber(cost.gold)}
+                  </span>
+                </div>
+              )}
+
+              <button
+                disabled={isDisabled}
+                onClick={() => onUpgrade(building.type as BuildingType)}
+                className="w-full rounded bg-gray-800 px-3 py-1.5 text-xs text-white dark:bg-gray-200 dark:text-gray-900 disabled:opacity-50"
+              >
+                {building.isUpgrading
+                  ? t('city.upgrading')
+                  : upgradingType === building.type
+                    ? t('city.upgrading')
+                    : !cost
+                      ? t('city.maxLevel')
+                      : t('city.upgrade')}
+              </button>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

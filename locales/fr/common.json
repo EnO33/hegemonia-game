@@ -81,5 +81,6 @@
   "city.building.academy": "Académie",
   "city.building.warehouse": "Entrepôt",
   "city.building.tavern": "Taverne",
-  "city.building.temple": "Temple"
+  "city.building.temple": "Temple",
+  "city.maxLevel": "Niveau max"
 }
