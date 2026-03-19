@@ -109,5 +109,16 @@
   "recruit.unit.transport": "Transport",
   "recruit.unit.fire_ship": "Fire Ship",
   "recruit.unit.colonist": "Colonist",
-  "recruit.unit.spy": "Spy"
+  "recruit.unit.spy": "Spy",
+  "map.title": "World Map — {{name}}",
+  "map.empty": "No islands in this world yet.",
+  "map.loading": "Loading...",
+  "map.selectIsland": "Click an island to see details.",
+  "map.island": "Island",
+  "map.cities": "Cities",
+  "map.slotsAvailable": "{{count}} slot(s) available",
+  "map.terrain.standard": "Standard",
+  "map.terrain.fertile": "Fertile",
+  "map.terrain.rocky": "Rocky",
+  "map.terrain.coastal": "Coastal"
 }
