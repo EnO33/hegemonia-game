@@ -31,5 +31,15 @@
   "profile.save": "Enregistrer",
   "profile.saving": "Enregistrement...",
   "profile.saved": "Modifications enregistrées",
-  "profile.error": "Échec de l'enregistrement"
+  "profile.error": "Échec de l'enregistrement",
+  "worlds.title": "Mondes disponibles",
+  "worlds.empty": "Aucun monde disponible pour le moment.",
+  "worlds.join": "Rejoindre",
+  "worlds.joining": "En cours...",
+  "worlds.speed.standard": "Normal",
+  "worlds.speed.speed": "Rapide",
+  "worlds.speed.casual": "Détente",
+  "worlds.status.open": "Ouvert",
+  "worlds.status.active": "Actif",
+  "worlds.status.ended": "Terminé"
 }
