@@ -26,5 +26,10 @@
   "auth.register.loading": "Création du compte...",
   "auth.register.error": "L'inscription a échoué",
   "auth.register.hasAccount": "Déjà un compte ?",
-  "auth.logout": "Déconnexion"
+  "auth.logout": "Déconnexion",
+  "profile.title": "Profil",
+  "profile.save": "Enregistrer",
+  "profile.saving": "Enregistrement...",
+  "profile.saved": "Modifications enregistrées",
+  "profile.error": "Échec de l'enregistrement"
 }
