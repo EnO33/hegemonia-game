@@ -149,3 +149,42 @@ export const getPlayerCity = createServerFn({ method: 'GET' })
 
     return city ?? null
   })
+
+export const getCityOverview = createServerFn({ method: 'GET' })
+  .inputValidator(z.object({ cityId: z.string().uuid() }))
+  .handler(async ({ data }) => {
+    const headers = getRequestHeaders()
+    const session = await auth.api.getSession({ headers })
+
+    if (!session) {
+      return null
+    }
+
+    const [city] = await db
+      .select()
+      .from(cities)
+      .where(eq(cities.id, data.cityId))
+      .limit(1)
+
+    if (!city) {
+      return null
+    }
+
+    // Verify ownership
+    const [player] = await db
+      .select()
+      .from(players)
+      .where(and(eq(players.id, city.playerId), eq(players.userId, session.user.id)))
+      .limit(1)
+
+    if (!player) {
+      return null
+    }
+
+    const cityBuildings = await db
+      .select()
+      .from(buildings)
+      .where(eq(buildings.cityId, data.cityId))
+
+    return { city, buildings: cityBuildings }
+  })

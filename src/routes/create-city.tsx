@@ -54,7 +54,10 @@ function CreateCityPage() {
     const result = await createCity({ data: { playerId, worldId, name } })
 
     if (result.success) {
-      navigate({ to: '/' })
+      navigate({
+        to: '/worlds/$worldId/city/$cityId',
+        params: { worldId, cityId: result.cityId },
+      })
       return
     }
 
