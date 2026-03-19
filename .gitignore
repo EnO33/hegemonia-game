@@ -1,0 +1,34 @@
+# dependencies
+node_modules/
+
+# build output
+.output/
+dist/
+
+# environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# generated
+*.gen.ts
+
+# test
+coverage/
+test-results/
+playwright-report/
+
+# drizzle
+drizzle/meta/
+
+# misc
+*.log
