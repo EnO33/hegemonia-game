@@ -1,0 +1,16 @@
+{
+  "app.name": "Hegemonia",
+  "app.tagline": "Build your city. Forge your empire. Dominate the world.",
+  "nav.home": "Home",
+  "nav.worlds": "Worlds",
+  "nav.profile": "Profile",
+  "theme.light": "Light",
+  "theme.dark": "Dark",
+  "theme.system": "System",
+  "locale.en": "English",
+  "locale.fr": "French",
+  "error.goBack": "Go back",
+  "error.startOver": "Start Over",
+  "error.tryAgain": "Try Again",
+  "error.notFound": "The page you are looking for does not exist."
+}

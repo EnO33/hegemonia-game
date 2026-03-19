@@ -6,9 +6,11 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import * as React from 'react'
+import { I18nextProvider } from 'react-i18next'
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary'
 import { NotFound } from '~/components/NotFound'
 import appCss from '~/styles/app.css?url'
+import i18n from '~/lib/i18n'
 import { seo } from '~/lib/seo'
 
 export const Route = createRootRoute({
@@ -44,7 +46,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <I18nextProvider i18n={i18n}>
+          {children}
+        </I18nextProvider>
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
       </body>
