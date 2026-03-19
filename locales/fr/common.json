@@ -120,5 +120,18 @@
   "map.terrain.standard": "Standard",
   "map.terrain.fertile": "Fertile",
   "map.terrain.rocky": "Rocheuse",
-  "map.terrain.coastal": "Côtière"
+  "map.terrain.coastal": "Côtière",
+  "attack.title": "Lancer une attaque",
+  "attack.selectUnits": "Sélectionnez les unités à envoyer",
+  "attack.travelTime": "Temps de trajet : {{time}}",
+  "attack.launch": "Lancer l'attaque",
+  "attack.launching": "Lancement...",
+  "attack.marching": "Armée en marche",
+  "attack.arrives": "Arrive dans {{time}}",
+  "attack.error.UNAUTHORIZED": "Vous devez être connecté.",
+  "attack.error.CITY_NOT_FOUND": "Cité introuvable.",
+  "attack.error.TARGET_NOT_FOUND": "Cité cible introuvable.",
+  "attack.error.CANNOT_ATTACK_SELF": "Vous ne pouvez pas attaquer votre propre cité.",
+  "attack.error.NO_UNITS": "Sélectionnez au moins une unité.",
+  "attack.error.INSUFFICIENT_UNITS": "Unités insuffisantes."
 }
