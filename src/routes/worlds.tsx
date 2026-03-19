@@ -30,7 +30,10 @@ function WorldsPage() {
     const result = await joinWorld({ data: { worldId } })
 
     if (result.success) {
-      navigate({ to: '/' })
+      navigate({
+        to: '/create-city',
+        search: { worldId, playerId: result.playerId },
+      })
     }
     setJoining(null)
   }
