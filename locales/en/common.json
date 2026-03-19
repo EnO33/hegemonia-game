@@ -26,5 +26,10 @@
   "auth.register.loading": "Creating account...",
   "auth.register.error": "Registration failed",
   "auth.register.hasAccount": "Already have an account?",
-  "auth.logout": "Sign out"
+  "auth.logout": "Sign out",
+  "profile.title": "Profile",
+  "profile.save": "Save changes",
+  "profile.saving": "Saving...",
+  "profile.saved": "Changes saved successfully",
+  "profile.error": "Failed to save changes"
 }
