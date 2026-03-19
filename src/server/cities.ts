@@ -3,8 +3,13 @@ import { getRequestHeaders } from '@tanstack/react-start/server'
 import { and, eq, sql } from 'drizzle-orm'
 import { z } from 'zod'
 import { db } from '../../db'
-import { cities, buildings, units, islands, players } from '../../db/schema'
+import { cities, buildings, units, islands, players, research } from '../../db/schema'
 import { auth } from '~/lib/auth'
+import {
+  calculateProductionRates,
+  calculateCurrentResources,
+  getStorageCap,
+} from '~/lib/resources'
 import type { buildingTypeEnum, unitTypeEnum } from '../../db/schema'
 
 const INITIAL_BUILDING_TYPES: (typeof buildingTypeEnum.enumValues)[number][] = [
@@ -186,5 +191,35 @@ export const getCityOverview = createServerFn({ method: 'GET' })
       .from(buildings)
       .where(eq(buildings.cityId, data.cityId))
 
-    return { city, buildings: cityBuildings }
+    const [island] = await db
+      .select()
+      .from(islands)
+      .where(eq(islands.id, city.islandId))
+      .limit(1)
+
+    const playerResearch = await db
+      .select()
+      .from(research)
+      .where(eq(research.playerId, city.playerId))
+
+    const warehouseBuilding = cityBuildings.find((b) => b.type === 'warehouse')
+    const storageCap = getStorageCap(warehouseBuilding?.level ?? 0)
+
+    const productionRates = island
+      ? calculateProductionRates(cityBuildings, island, playerResearch)
+      : { food: 0, wood: 0, stone: 0, gold: 0 }
+
+    const currentResources = calculateCurrentResources(
+      city,
+      productionRates,
+      storageCap,
+    )
+
+    return {
+      city,
+      buildings: cityBuildings,
+      productionRates,
+      currentResources,
+      storageCap,
+    }
   })

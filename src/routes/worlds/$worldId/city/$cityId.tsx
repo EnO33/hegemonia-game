@@ -28,52 +28,27 @@ const RESOURCE_ICONS: Record<string, string> = {
   gold: '💰',
 }
 
-const BASE_PRODUCTION_RATES: Record<string, number> = {
-  farm: 100,
-  lumber_mill: 80,
-  quarry: 60,
-  market: 40,
-}
-
-const BUILDING_RESOURCE_MAP: Record<string, string> = {
-  farm: 'food',
-  lumber_mill: 'wood',
-  quarry: 'stone',
-  market: 'gold',
-}
-
-function getProductionRate(buildingType: string, level: number): number {
-  const baseRate = BASE_PRODUCTION_RATES[buildingType]
-  if (!baseRate || level === 0) return 0
-  return Math.round(baseRate * level * 1.15)
-}
+const RESOURCE_BUILDING_TYPES = new Set(['farm', 'lumber_mill', 'quarry'])
+const MILITARY_BUILDING_TYPES = new Set(['barracks', 'stable', 'siege_workshop', 'harbor'])
+const INFRA_BUILDING_TYPES = new Set([
+  'senate', 'academy', 'warehouse', 'tavern', 'temple', 'wall', 'market',
+])
 
 function CityOverviewPage() {
   const { t } = useTranslation()
-  const { city, buildings } = Route.useLoaderData()
+  const { city, buildings, productionRates, currentResources, storageCap } =
+    Route.useLoaderData()
 
   const resources = [
-    { key: 'food', amount: city.food },
-    { key: 'wood', amount: city.wood },
-    { key: 'stone', amount: city.stone },
-    { key: 'gold', amount: city.gold },
+    { key: 'food' as const, amount: currentResources.food },
+    { key: 'wood' as const, amount: currentResources.wood },
+    { key: 'stone' as const, amount: currentResources.stone },
+    { key: 'gold' as const, amount: currentResources.gold },
   ]
 
-  const productionRates = buildings.reduce<Record<string, number>>((acc, building) => {
-    const resource = BUILDING_RESOURCE_MAP[building.type]
-    if (resource) {
-      acc[resource] = getProductionRate(building.type, building.level)
-    }
-    return acc
-  }, {})
-
-  const resourceBuildings = buildings.filter((b) => b.type in BASE_PRODUCTION_RATES)
-  const militaryBuildings = buildings.filter((b) =>
-    ['barracks', 'stable', 'siege_workshop', 'harbor'].includes(b.type),
-  )
-  const infrastructureBuildings = buildings.filter((b) =>
-    ['senate', 'academy', 'warehouse', 'tavern', 'temple', 'wall', 'market'].includes(b.type),
-  )
+  const resourceBuildings = buildings.filter((b) => RESOURCE_BUILDING_TYPES.has(b.type))
+  const militaryBuildings = buildings.filter((b) => MILITARY_BUILDING_TYPES.has(b.type))
+  const infrastructureBuildings = buildings.filter((b) => INFRA_BUILDING_TYPES.has(b.type))
 
   return (
     <div className="mx-auto max-w-4xl p-4 space-y-6">
@@ -97,9 +72,14 @@ function CityOverviewPage() {
               <span>{RESOURCE_ICONS[resource.key]}</span>
               <span>{t(`city.resource.${resource.key}`)}</span>
             </div>
-            <p className="text-lg font-bold">{formatNumber(resource.amount)}</p>
+            <p className="text-lg font-bold">
+              {formatNumber(resource.amount)}
+              <span className="text-xs font-normal text-gray-400">
+                /{formatNumber(storageCap)}
+              </span>
+            </p>
             <p className="text-xs text-gray-500">
-              +{productionRates[resource.key] ?? 0}/{t('city.perHour')}
+              +{productionRates[resource.key]}/{t('city.perHour')}
             </p>
           </div>
         ))}
@@ -208,7 +188,6 @@ function UpgradeTimer({ endsAt }: { endsAt: Date }) {
   )
 }
 
-function formatNumber(value: string | number): string {
-  const num = typeof value === 'string' ? parseFloat(value) : value
-  return Math.floor(num).toLocaleString()
+function formatNumber(value: number): string {
+  return Math.floor(value).toLocaleString()
 }
