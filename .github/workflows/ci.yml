@@ -33,7 +33,7 @@ jobs:
         run: bun run test
 
       - name: Audit dependencies
-        run: bun pm audit || true
+        run: bun pm scan || true
 
   e2e:
     name: E2E Tests
