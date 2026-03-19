@@ -120,5 +120,18 @@
   "map.terrain.standard": "Standard",
   "map.terrain.fertile": "Fertile",
   "map.terrain.rocky": "Rocky",
-  "map.terrain.coastal": "Coastal"
+  "map.terrain.coastal": "Coastal",
+  "attack.title": "Launch Attack",
+  "attack.selectUnits": "Select units to send",
+  "attack.travelTime": "Travel time: {{time}}",
+  "attack.launch": "Launch Attack",
+  "attack.launching": "Launching...",
+  "attack.marching": "Army marching",
+  "attack.arrives": "Arrives in {{time}}",
+  "attack.error.UNAUTHORIZED": "You must be logged in.",
+  "attack.error.CITY_NOT_FOUND": "City not found.",
+  "attack.error.TARGET_NOT_FOUND": "Target city not found.",
+  "attack.error.CANNOT_ATTACK_SELF": "You cannot attack your own city.",
+  "attack.error.NO_UNITS": "Select at least one unit.",
+  "attack.error.INSUFFICIENT_UNITS": "Not enough units available."
 }
