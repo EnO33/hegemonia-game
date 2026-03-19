@@ -109,5 +109,16 @@
   "recruit.unit.transport": "Transport",
   "recruit.unit.fire_ship": "Brûlot",
   "recruit.unit.colonist": "Colon",
-  "recruit.unit.spy": "Espion"
+  "recruit.unit.spy": "Espion",
+  "map.title": "Carte du monde — {{name}}",
+  "map.empty": "Aucune île dans ce monde.",
+  "map.loading": "Chargement...",
+  "map.selectIsland": "Cliquez sur une île pour voir les détails.",
+  "map.island": "Île",
+  "map.cities": "Cités",
+  "map.slotsAvailable": "{{count}} emplacement(s) disponible(s)",
+  "map.terrain.standard": "Standard",
+  "map.terrain.fertile": "Fertile",
+  "map.terrain.rocky": "Rocheuse",
+  "map.terrain.coastal": "Côtière"
 }
