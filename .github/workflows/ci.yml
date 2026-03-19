@@ -32,8 +32,6 @@ jobs:
       - name: Unit tests
         run: bun run test
 
-      - name: Audit dependencies
-        run: bun pm scan || true
 
   e2e:
     name: E2E Tests
