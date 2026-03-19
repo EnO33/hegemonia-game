@@ -1,3 +1,12 @@
-// Barrel export for all schema definitions
-// Each domain will add its own schema file here
-export {}
+export * from './worlds'
+export * from './islands'
+export * from './players'
+export * from './cities'
+export * from './buildings'
+export * from './units'
+export * from './alliances'
+export * from './armies'
+export * from './battles'
+export * from './research'
+export * from './spy-missions'
+export * from './messages'
