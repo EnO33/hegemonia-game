@@ -1,3 +1,4 @@
+export * from './auth'
 export * from './worlds'
 export * from './islands'
 export * from './players'
